@@ -1,0 +1,70 @@
+
+{% block content %}
+  <style>
+    /* CSS code goes here */
+    body {
+      background-color: #111010;
+    }
+
+    .form-container {
+      background-color: rgb(4, 42, 83);
+      color: white;
+      padding: 20px;
+      border-radius: 5px;
+      max-width: 500px;
+      margin: 0 auto;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-container label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .form-container input[type="text"],
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      background-color: #555;
+      color: white;
+    }
+
+    .form-container button[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .form-container button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .form-container p {
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+  </style>
+
+  <div class="form-container">
+    <h1 class="section-title">Customer Service</h1>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Send</button>
+    </form>
+  </div>
+{% endblock %}

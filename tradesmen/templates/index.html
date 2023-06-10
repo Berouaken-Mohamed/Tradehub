@@ -1,0 +1,312 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style.css">
+    <!--font-->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap" rel="stylesheet">
+    <!-- icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <title>Freelancing website for Tradesmen</title>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="navbar">
+        <h2 class="navbar-logo"><a href="#">TRADEHUB</a></h2>
+        <div class="navbar-menu">
+            <a href="#jobs">Jobs</a>
+            <a href="#tradesmen">Companies</a>
+            <a href="#testimoni">Comments</a>
+            <a href="#blog">Blogs</a>
+            <a href="http://127.0.0.1:8000/admin/login/?next=/admin/">Login</a>
+        </div>
+        <div class="menu-toggle">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+    <!-- header -->
+    <header>
+        <h1 class="header-title">
+            FIND YOUR SUITABLE<br> <span>TRADESMAN</span> <br> EASILY
+        </h1>
+    </header>
+    
+    <!-- search -->
+    <div class="search-wrapper">
+        <div class="search-box">
+           <div class="search-card">
+                <input class="search-input" type="text" placeholder="Job title or keywords">
+                <button class="search-button">Search</button>
+           </div> 
+        </div>
+    </div>
+    <!-- filter -->
+    <div class="filter-box">
+        <div class="filter-dropdown">
+            <select class="filter-select" id="job-function" name="job-function">
+                <option>Job function</option>
+                <option>Electrician</option>
+                <option>Plumber</option>
+                <option>Painter</option>
+                <option>Handyman</option>
+            </select>
+            <select class="filter-select" id="location" name="location">
+                <option>Location</option>
+                <option>Alger</option>
+                <option>Boumerdes</option>
+            </select>
+        </div>
+        <div class="filter-chosen">
+            <div class="chosen-card">
+                Electrician <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="chosen-card">
+                Alger <i class="fas fa-times-circle"></i>
+            </div>
+        </div>
+    </div>
+    <!-- job listing -->
+        <section class="job-list" id="jobs">
+            {% if user.is_authenticated %}
+            <form id="job-form" data-url="{% url 'tradesmen:create_job' %}">
+                <input type="text" class="title-input" id="title-input" placeholder="Job Title" required>
+                <textarea class="description-input" id="description-input" placeholder="Job Description" required></textarea>
+                <input type="file" class="profile-image-input" id="profile-image-input" accept="image/*" required>
+                <input type="text" class="label-input" id="label-input" placeholder="Label" required>
+                <button class="sub_button" type="submit">Create Job</button>
+              </form>
+            {% endif %}
+              
+            <div id="job-container">
+                {% for job in jobs %}
+                <div class="job-card">
+                    <div class="job-name">
+                        <img class="job-profile" src="{{ MEDIA_URL }}{{ job.profile_image.url }}" alt="Profile Image">
+                        <div class="job-detail">
+                            <!-- Display job details -->
+                            <h3>{{ job.title }}</h3>
+                            <p>{{ job.description }}</p>
+                            <!-- Display other job information -->
+                        </div>
+                    </div>  
+                        <div class="job-label">{{ job.label }}</div>
+                        <div>Posted {{ job.posted }} ago</div>
+                        <!-- Delete button and other actions -->
+                        <button class="delete-button">Delete</button>
+                    
+                </div>
+                {% endfor %}
+            </div>
+            <button class="job-more">More List</button>
+        </section>
+          
+        <!--  
+        <div class="job-card">
+            <div class="job-name">
+                <img class="job-profile" src="static/images/tesla.svg">
+                <div class="job-detail">
+                    <h4>Tesla</h4>
+                    <h3>Mechanical Engineer</h3>
+                    <p>locas hokas pocahones locas hokas pocahones locas hokas pocahones</p>
+                </div>
+            </div>
+            <div class="job-label">
+                <a class="label-a" href="a">HTML</a>
+                <a class="label-b" href="a">CSS</a>
+                <a class="label-c" href="a">Javascript</a>
+            </div>
+            <div class="job-posted">
+                Posted 2 min ago
+            </div>
+        </div>
+    -->
+
+    <!-- Join -->
+    <section class="join">
+        <div class="join-detail">
+            <h1 class="section-title">LET'S START YOUR NEW JOB WITH US</h1>
+            <p></p>
+        </div>
+        <button class="join-button" id="join-button">Join Now</button>
+    </section>
+
+    <!-- featured company -->
+    <section class="featured" id="tradesmen">
+        <h1 class="section-title">Featured Companies</h1>
+        <p>You can find here Companies that we partnered with and the jobs that they offer for different tradesmen</p>
+        <div class="featured-wrapper">
+            <div class="featured-card">
+                <img class="featured-image" src="static/images/ebay.svg">
+                <p>Ebay</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+
+            <div class="featured-card">
+                <img class="featured-image" src="static/images/youtube.svg">
+                <p>Youtube</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+
+            <div class="featured-card">
+                <img class="featured-image" src="static/images/google.svg">
+                <p>Google</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+
+            <div class="featured-card">
+                <img class="featured-image" src="static/images/tesla.svg">
+                <p>Tesla</p>
+                <button class="featured-button">View 2 jobs</button>
+            </div>
+
+        </div>
+    </section>
+    <!-- testimoni -->
+    <section class="testimoni" id="testimoni">
+        <h1 class="section-title">Comments</h1>
+        <p>Let's see what our clients say about us</p>
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <i class="fas fa-quote-left"></i>
+                    <h3>"I've been using this platform to find jobs as a tradesman, and it's been a game-changer for my career. Highly recommended!"</h3>
+                    <div class="testimoni-pic">
+                        <img src="static/images/profile1.jpg">
+                        <p>Abdallah Lagra</p>
+                        <span>Plumber</span>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <i class="fas fa-quote-left"></i>
+                    <h3>"I needed a reliable plumber for an urgent repair, and I found the perfect professional on this website. Will definitely use it again!"</h3>
+                    <div class="testimoni-pic">
+                        <img src="static/images/profile2.jpg">
+                        <p>Salah Eddine</p>
+                        <span>Homeowner</span>
+                        <!-- electrician -->
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <i class="fas fa-quote-left"></i>
+                    <h3>"I was skeptical about finding reliable tradesmen online, but this website exceeded my expectations. Fantastic results!"</h3>
+                    <div class="testimoni-pic">
+                        <img src="static/images/profile3.jpg">
+                        <p>Jamal Chemsi</p>
+                        <span>Homeowner</span>
+                        <!-- painter -->
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <i class="fas fa-quote-left"></i>
+                    <h3>"As a carpenter, I've struggled to find consistent work until I joined this platform. It has helped me grow my client base."</h3>
+                    <div class="testimoni-pic">
+                        <img src="static/images/profile4.jpg">
+                        <p>Farid SB</p>
+                        <span>Carpenter</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <!-- blog -->
+    <section class="blog" id="blog">
+        <h1 class="section-title">Career Advices</h1>
+        <p>Learn more career tips from Company's recruter</p>
+        <div class="blog-wrapper">
+            <div class="blog-card" onclick="redirectTo('https://www.tradifyhq.com/blog/how-to-be-a-good-tradesman')">
+                <img class="blog-image" src="static/images/blog1.jpeg">
+                <div class="blog-detail">
+                    <span>11 apr 2022</span>
+                    <h4>How to enjoy your work</h4>
+                    <p>Discover valuable tips to enhance your skills as a tradesman and excel in your craft.</p>
+                    <hr class="divider">
+                    <a href="#" class="blog-more">Read more</a>
+                </div>
+            </div>
+
+            <div class="blog-card" onclick="redirectTo('http://gillmannservices.com/interview-questions-for-skilled-tradesmen/')">
+                <img class="blog-image" src="static/images/blog2.jpg">
+                <div class="blog-detail">
+                    <span>24 apr 2022</span>
+                    <h4>10 tips for technical interview</h4>
+                    <p>Prepare for a technical interview with 10 essential tips.</p>
+                    <hr class="divider">
+                    <a href="#" class="blog-more">Read more</a>
+                </div>
+            </div>
+
+            <div class="blog-card" onclick="redirectTo('https://skilled.peopleready.com/7-ways-to-promote-work-life-balance-for-skilled-tradesmen-tradeswomen/')">
+                <img class="blog-image" src="static/images/blog3.jpeg">
+                <div class="blog-detail">
+                    <span>11 may 2022</span>
+                    <h4>Achieving Work-Life Balance as a Tradesman:</h4>
+                    <p>Discover practical strategies to balance your work and personal life effectively as a tradesman.</p>
+                    <hr class="divider">
+                    <a href="#" class="blog-more">Read more</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <!-- footer -->
+    <footer>
+        <div class="footer-wrapper">
+            <h1>TRADEHUB</h1>
+            <p>tradehub.dz@gmail.com</p>
+            <div class="social-media">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <!--  
+        <div class="footer-wrapper">
+            <h4>Explore</h4>
+            <a href="#">Top Tradesmen</a>
+            <a href="#">Terms of service</a>
+            <a href="#">Blog</a>
+        </div>
+        <div class="footer-wrapper">
+            <h4>About</h4>
+            <a href="#">FAQ</a>
+            <a href="#">Get Inspired</a>
+            <a href="#">Podcast</a>
+            <a href="#">Careers</a>
+        </div>
+        -->
+        <div class="footer-wrapper">
+            <h4>Support</h4>
+            <a href="{% url 'tradesmen:customer_service' %}">Customer Service</a>
+            <a href="#">Terms of service</a>
+            <!-- <a href="#">Trust & Safety</a> -->
+            <a href="#">Partnership</a>
+        </div>
+        <!-- 
+        <div class="footer-wrapper">
+            <h4>Community</h4>
+            <a href="#">Community</a>
+            <a href="#">Invite a Friend</a>
+        </div>
+        -->
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="static/back.js"></script>
+    <script src="static/job.js"></script>
+
+</body>
+</html>

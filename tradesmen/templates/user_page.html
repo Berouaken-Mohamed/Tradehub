@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <title>User Page</title>
+  <link rel="stylesheet" href="/static/admin/css/base.css">
+  <link rel="stylesheet" href="/static/admin/css/dark_mode.css">
+  <script src="/static/admin/js/theme.js" defer></script>
+  <link rel="stylesheet" href="/static/admin/css/nav_sidebar.css">
+  <script src="/static/admin/js/nav_sidebar.js" defer></script>
+  <link rel="stylesheet" href="/static/admin/css/dashboard.css">
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" href="/static/admin/css/responsive.css">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style>
+    /* Additional user page styles */
+    .content {
+      margin: 20px;
+    }
+
+    .job-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .job-item {
+      margin-bottom: 10px;
+    }
+
+    .job-title {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .job-actions {
+      margin-top: 5px;
+    }
+
+    .delete-job {
+      color: red;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body class="dashboard" data-admin-utc-offset="0">
+  <!-- Container -->
+  <div id="container">
+    <!-- Header -->
+    <div id="header">
+      <div id="branding">
+        <h1 id="site-name"><a href="/admin/">Django administration</a></h1>
+      </div>
+      <div id="user-tools">
+        Welcome, <strong>{{ user.username }}</strong>.
+        <a href="/">View site</a> /
+        <a href="/admin/password_change/">Change password</a> /
+        <form id="logout-form" method="post" action="/admin/logout/">
+          <input type="hidden" name="csrfmiddlewaretoken" value="lyZJfN4vcUkqdWksdgjS6UzpWnJf9yeAYgKoeEUCJ1LW0WpXyeBAm1GTLThd0IN7">
+          <button type="submit">Log out</button>
+        </form>
+        <button class="theme-toggle">
+          <div class="visually-hidden theme-label-when-auto">Toggle theme (current theme: auto)</div>
+          <div class="visually-hidden theme-label-when-light">Toggle theme (current theme: light)</div>
+          <div class="visually-hidden theme-label-when-dark">Toggle theme (current theme: dark)</div>
+          <svg aria-hidden="true" class="theme-icon-when-auto">
+            <use xlink:href="#icon-auto" />
+          </svg>
+          <svg aria-hidden="true" class="theme-icon-when-dark">
+            <use xlink:href="#icon-moon" />
+          </svg>
+          <svg aria-hidden="true" class="theme-icon-when-light">
+            <use xlink:href="#icon-sun" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- END Header -->
+    <div class="main" id="main">
+      <div id="content-start" class="content">
+        <h2>User Page: {{ user.username }}</h2>
+        <h3>Jobs posted by {{ user.username }}:</h3>
+        <ul class="job-list">
+          {% for job in jobs %}
+            <li class="job-item">
+              <div class="job-title">{{ job.title }}</div>
+              <div class="job-description">{{ job.description }}</div>
+              <div class="job-actions">
+                <span class="delete-job" onclick="deleteJob('{{ job.id }}')">Delete Job</span>
+              </div>
+            </li>
+          {% empty %}
+            <li>No jobs found.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function deleteJob(jobId) {
+      // Perform AJAX request to delete the job
+      // You can use your preferred method or library here, such as jQuery.ajax or fetch API
+      // Example using fetch API:
+      fetch(`/delete_job/${jobId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}',
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          // Job deleted successfully, you can update the UI as needed
+          // For example, remove the deleted job from the DOM
+          const jobElement = document.getElementById(`job-${jobId}`);
+          if (jobElement) {
+            jobElement.remove();
+          }
+        } else {
+          // Handle error case
+          console.error('Error deleting job');
+        }
+      })
+      .catch(error => {
+        // Handle error case
+        console.error('Error deleting job', error);
+      });
+    }
+  </script>
+</body>
+</html>
